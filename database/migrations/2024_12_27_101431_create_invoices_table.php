@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('customer_id'); // INTEGER REFERENCES customers(customer_id)
-            $table->date('invoice_date'); // DATE NOT NULL
+            $table->unsignedBigInteger('customer_id'); // INTEGER REFERENCES customers(customer_id)
+            $table->date('date'); // DATE NOT NULL
             $table->date('due_date'); // DATE NOT NULL
             $table->decimal('discount_amount', 10, 2)->default(0); // DECIMAL(10,2) DEFAULT 0
             $table->decimal('paid_amount', 10, 2)->default(0); // DECIMAL(10,2) DEFAULT 0
@@ -21,10 +21,11 @@ return new class extends Migration {
             $table->string('shipping_address')->default(null); // BOOLEAN DEFAULT false
             $table->string('customer_address')->default(null); // BOOLEAN DEFAULT false
             $table->text('notes')->nullable(); // TEXT, nullable
+            $table->enum('status', ['unpaid', 'paid', 'partially_paid'])->default('unpaid');
             $table->timestamps();
 
             // Foreign key constraint
-            // $table->foreign('customer_id')->references('id')->on('customers')->cascadeOnDelete();
+            $table->foreign('customer_id')->references('id')->on('customers')->cascadeOnDelete();
 
             // Check constraint for total_amount (requires raw SQL as Laravel doesn't support CHECK natively)
         });

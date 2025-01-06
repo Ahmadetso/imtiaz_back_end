@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Resources\CustomersResource;
 use App\Http\Resources\InvoicesResource;
-use App\Models\Customer;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 
@@ -15,12 +13,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = InvoicesResource::collection(Invoice::all()->take(100));
-        $customers = CustomersResource::collection(Customer::all()->take(100));
-        return[
-            'invoices' => $invoices,
-            'customers' => $customers
-          ];
+        $invoices = Invoice::latest()->take(100)->get();
+        return InvoicesResource::collection($invoices);
 
     }
 

@@ -15,8 +15,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = InvoicesResource::collection(Invoice::all()->take(100));
-        $customers = CustomersResource::collection(Customer::all()->take(100));
+        $invoices = InvoicesResource::collection(Invoice::latest()->take(100)->get());
+        $customers = CustomersResource::collection(Customer::latest()->pluck('name'));
         return[
             'invoices' => $invoices,
             'customers' => $customers
